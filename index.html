@@ -1,0 +1,1356 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Akshaya e Centre Chandappura</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- GSAP for Animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        bgLight: '#e5f9f8',
+                        textDark: '#042332',
+                        primary: '#413f94',
+                        highlight: '#0e9ce0',
+                        white: '#ffffff',
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'neon': '0 0 20px rgba(14, 156, 224, 0.4)',
+                        'card': '0 10px 30px -5px rgba(4, 35, 50, 0.1)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #e5f9f8;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #413f94;
+            border-radius: 4px;
+        }
+
+        /* Modal Animation */
+        .modal {
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease-in-out;
+            pointer-events: none;
+        }
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+        .modal-content {
+            transform: scale(0.95) translateY(20px);
+            transition: all 0.3s ease-in-out;
+        }
+        .modal.active .modal-content {
+            transform: scale(1) translateY(0);
+        }
+
+        /* Gallery Transitions */
+        .gallery-img {
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease;
+        }
+        .gallery-item:hover .gallery-img {
+            transform: scale(1.1);
+        }
+        .gallery-item:hover .overlay {
+            opacity: 1;
+        }
+
+        /* Lightbox specific */
+        #lightbox {
+            background-color: rgba(0, 0, 0, 0.9);
+        }
+
+        /* Floating WhatsApp Button */
+        .whatsapp-float {
+            position: fixed;
+            width: 60px;
+            height: 60px;
+            bottom: 40px;
+            right: 40px;
+            background-color: #25d366;
+            color: #FFF;
+            border-radius: 50px;
+            text-align: center;
+            font-size: 30px;
+            box-shadow: 2px 2px 3px #999;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(37, 211, 102, 0.6);
+        }
+
+        /* Star Rating */
+        .star-rating input { display: none; }
+        .star-rating label {
+            color: #ddd;
+            font-size: 24px;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .star-rating input:checked ~ label,
+        .star-rating label:hover,
+        .star-rating label:hover ~ label {
+            color: #facc15;
+        }
+        .star-rating {
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: flex-end;
+        }
+
+        /* Marquee Animation for Team Section */
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .animate-marquee {
+            display: flex;
+            width: max-content;
+            animation: marquee 30s linear infinite;
+        }
+        .pause-on-hover:hover .animate-marquee {
+            animation-play-state: paused;
+        }
+    </style>
+</head>
+<body class="bg-bgLight text-textDark font-sans overflow-x-hidden">
+
+    <!-- Navbar -->
+    <nav class="fixed w-full z-50 transition-all duration-300 bg-white/80 backdrop-blur-md border-b border-gray-100" id="navbar">
+        <div class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <!-- Brand with Tagline -->
+            <a href="#" class="flex items-center gap-3 group">
+                <div>
+                    <img
+                     class="navbar-logo"
+                     src="https://images.seeklogo.com/logo-png/32/2/akshaya-logo-png_seeklogo-324113.png"
+                     alt="Logo"
+                     style="width: 50px;"
+                     />
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-2xl font-display font-bold tracking-tight text-textDark leading-none">
+                        AKSHAYA E CENTRE</span>
+                    </span>
+                    <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 group-hover:text-primary transition-colors duration-300 mt-1">Chandappura | KNR009</span>
+                </div>
+            </a>
+
+            <!-- Desktop Menu -->
+            <div class="hidden lg:flex items-center gap-8 font-semibold text-sm uppercase tracking-wider text-textDark/80">
+                <a href="#home" class="hover:text-primary transition-colors">Home</a>
+                <a href="#services" class="hover:text-primary transition-colors">Services</a>
+                <a href="#gallery" class="hover:text-primary transition-colors">Gallery</a>
+                <a href="#team" class="hover:text-primary transition-colors">Team</a>
+                <a href="#feedback" class="hover:text-primary transition-colors">Reviews</a>
+                <a href="#contact" class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-highlight transition-all duration-300 shadow-lg">Contact</a>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <button class="lg:hidden text-2xl text-textDark" id="menu-btn">
+                <i class="fa-solid fa-bars-staggered"></i>
+            </button>
+        </div>
+        
+        <!-- Mobile Menu Dropdown -->
+        <div class="lg:hidden fixed top-[72px] left-0 w-full bg-white shadow-xl transform -translate-y-[150%] transition-transform duration-300 z-40" id="mobile-menu">
+            <div class="flex flex-col p-6 gap-4 font-bold text-center">
+                <a href="#home" class="mobile-link py-3 border-b border-gray-100">Home</a>
+                <a href="#services" class="mobile-link py-3 border-b border-gray-100">Services</a>
+                <a href="#gallery" class="mobile-link py-3 border-b border-gray-100">Gallery</a>
+                <a href="#team" class="mobile-link py-3 border-b border-gray-100">Team</a>
+                <a href="#feedback" class="mobile-link py-3 border-b border-gray-100">Feedback</a>
+                <a href="#contact" class="py-3 bg-primary text-white rounded-lg mt-2">Contact Us</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Modern Hero Section -->
+    <section id="home" class="relative pt-32 pb-24 lg:pt-48 lg:pb-32 bg-textDark overflow-hidden rounded-br-[80px]">
+        <div class="absolute top-0 right-0 w-1/2 h-full bg-primary/20 skew-x-12 transform translate-x-20"></div>
+        <div class="absolute bottom-0 left-0 w-64 h-64 bg-highlight/20 rounded-full blur-3xl"></div>
+
+        <div class="container mx-auto px-6 relative z-10 text-white">
+            <div class="flex flex-col lg:flex-row items-center gap-16">
+                <div class="lg:w-1/2 space-y-8">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-highlight/20 border border-highlight/30 text-highlight text-sm font-semibold">
+                        <span class="w-2 h-2 rounded-full bg-highlight animate-pulse"></span>
+                        Gateway of opportunities
+                    </div>
+                    <h1 class="text-5xl lg:text-7xl font-display font-bold leading-tight">
+                        Digital Services <br>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-highlight to-bgLight">Redefined.</span>
+                    </h1>
+                    <p class="text-gray-400 text-lg leading-relaxed max-w-xl">
+                        Experience the next generation of e-Governance. From Aadhaar updates to complex legal documentation, we simplify bureaucracy for you.
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <a href="#services" class="px-8 py-4 bg-highlight text-textDark font-bold rounded-lg hover:bg-white transition-all shadow-neon">
+                            Explore Services
+                        </a>
+                        <a href="#feedback" class="px-8 py-4 border border-gray-600 text-white font-bold rounded-lg hover:border-highlight hover:text-highlight transition-all">
+                            Rate Us
+                        </a>
+                    </div>
+                    
+                    <div class="grid grid-cols-3 gap-6 pt-8 border-t border-gray-700">
+                        <div>
+                            <h3 class="text-2xl font-bold text-white">100+</h3>
+                            <p class="text-sm text-gray-400">Services</p>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-white">150k+</h3>
+                            <p class="text-sm text-gray-400">Processed</p>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-white">4.9</h3>
+                            <p class="text-sm text-gray-400">Rating</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:w-1/2 relative">
+                    <div class="relative z-10 bg-gradient-to-br from-gray-800 to-gray-900 p-2 rounded-2xl shadow-2xl rotate-2 hover:rotate-0 transition-all duration-500 border border-gray-700">
+                        <!-- REPLACE IMAGE: Place your hero image in a local folder -->
+                        <img src="https://lh3.googleusercontent.com/p/AF1QipPthR-dO1LD1ejbZVInVNzCa9T6HKCDQiNoVsq2=s1360-w1360-h1020" alt="Digital Center" class="rounded-xl w-full h-[450px] object-cover opacity-90">
+                    </div>
+                    <div class="absolute -top-4 -right-4 w-full h-full border-2 border-highlight/30 rounded-2xl -z-10"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-24 bg-white relative">
+        <div class="container mx-auto px-6">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+            <!--<span class="text-primary font-bold tracking-widest uppercase text-sm">Comprehensive Catalogue</span>-->
+                <h2 class="text-4xl font-display font-bold text-textDark mt-2 mb-4">What Can We Do For You?</h2>
+                <div class="h-1.5 w-24 bg-gradient-to-r from-primary to-highlight mx-auto rounded-full mb-4"></div>
+                <p class="text-gray-500 text-sm">Click on any service to see the required documents.</p>
+            </div>
+
+            <!-- Tabs Navigation -->
+            <div class="flex flex-wrap justify-center gap-4 mb-12">
+                <button onclick="switchTab('all')" class="tab-btn active px-6 py-2 rounded-full border border-gray-200 font-semibold hover:bg-primary hover:text-white transition-all bg-primary text-white" data-category="all">All Services</button>
+                <button onclick="switchTab('id')" class="tab-btn px-6 py-2 rounded-full border border-gray-200 font-semibold text-gray-600 hover:bg-primary hover:text-white transition-all" data-category="id">Identity Cards</button>
+                <button onclick="switchTab('govt')" class="tab-btn px-6 py-2 rounded-full border border-gray-200 font-semibold text-gray-600 hover:bg-primary hover:text-white transition-all" data-category="govt">Govt. Docs</button>
+                <button onclick="switchTab('utility')" class="tab-btn px-6 py-2 rounded-full border border-gray-200 font-semibold text-gray-600 hover:bg-primary hover:text-white transition-all" data-category="utility">Bill & Travel</button>
+                <button onclick="switchTab('student')" class="tab-btn px-6 py-2 rounded-full border border-gray-200 font-semibold text-gray-600 hover:bg-primary hover:text-white transition-all" data-category="student">Students</button>
+            </div>
+
+            <!-- Services Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="services-grid">
+                
+                <!-- Category: Identity (id) -->
+                <div class="service-card cursor-pointer group p-6 rounded-xl bg-bgLight border border-gray-100 hover:border-highlight hover:shadow-card transition-all duration-300" data-category="id" onclick="openModal('aadhaar')">
+                    <div class="w-12 h-12 bg-white rounded-lg flex items-center justify-center text-primary text-xl shadow-sm mb-4 group-hover:bg-primary group-hover:text-white transition-colors">
+                        <i class="fa-solid fa-fingerprint"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-textDark mb-2">Aadhaar Services</h3>
+                    <p class="text-sm text-gray-600">Enrollment, Corrections, Bio-metric update & PVC Print.</p>
+                </div>
+
+                <div class="service-card cursor-pointer group p-6 rounded-xl bg-bgLight border border-gray-100 hover:border-highlight hover:shadow-card transition-all duration-300" data-category="id" onclick="openModal('voter')">
+                    <div class="w-12 h-12 bg-white rounded-lg flex items-center justify-center text-primary text-xl shadow-sm mb-4 group-hover:bg-primary group-hover:text-white transition-colors">
+                        <i class="fa-solid fa-address-card"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-textDark mb-2">Voter ID</h3>
+                    <p class="text-sm text-gray-600">New registration, constituency change & EPIC card download.</p>
+                </div>
+
+                <div class="service-card cursor-pointer group p-6 rounded-xl bg-bgLight border border-gray-100 hover:border-highlight hover:shadow-card transition-all duration-300" data-category="id" onclick="openModal('passport')">
+                    <div class="w-12 h-12 bg-white rounded-lg flex items-center justify-center text-primary text-xl shadow-sm mb-4 group-hover:bg-primary group-hover:text-white transition-colors">
+                        <i class="fa-solid fa-passport"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-textDark mb-2">Passport Seva</h3>
+                    <p class="text-sm text-gray-600">New passport, renewal, PCC, and appointment scheduling.</p>
+                </div>
+
+                <div class="service-card cursor-pointer group p-6 rounded-xl bg-bgLight border border-gray-100 hover:border-highlight hover:shadow-card transition-all duration-300" data-category="id" onclick="openModal('pancard')">
+                    <div class="w-12 h-12 bg-white rounded-lg flex items-center justify-center text-primary text-xl shadow-sm mb-4 group-hover:bg-primary group-hover:text-white transition-colors">
+                        <i class="fa-solid fa-id-card"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-textDark mb-2">PAN Card</h3>
+                    <p class="text-sm text-gray-600">New PAN application, correction, and linking with Aadhaar.</p>
+                </div>
+
+                <!-- Category: Govt Docs (govt) -->
+                <div class="service-card cursor-pointer group p-6 rounded-xl bg-bgLight border border-gray-100 hover:border-highlight hover:shadow-card transition-all duration-300" data-category="govt" onclick="openModal('edistrict')">
+                    <div class="w-12 h-12 bg-white rounded-lg flex items-center justify-center text-primary text-xl shadow-sm mb-4 group-hover:bg-primary group-hover:text-white transition-colors">
+                        <i class="fa-solid fa-file-contract"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-textDark mb-2">E-District</h3>
+                    <p class="text-sm text-gray-600">Income, Nativity, Community, Caste & Possession certificates.</p>
+                </div>
+
+                <div class="service-card cursor-pointer group p-6 rounded-xl bg-bgLight border border-gray-100 hover:border-highlight hover:shadow-card transition-all duration-300" data-category="govt" onclick="openModal('ration')">
+                    <div class="w-12 h-12 bg-white rounded-lg flex items-center justify-center text-primary text-xl shadow-sm mb-4 group-hover:bg-primary group-hover:text-white transition-colors">
+                        <i class="fa-solid fa-bowl-food"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-textDark mb-2">Ration Card</h3>
+                    <p class="text-sm text-gray-600">Member addition, deletion, corrections, and e-KYC.</p>
+                </div>
+
+                <div class="service-card cursor-pointer group p-6 rounded-xl bg-bgLight border border-gray-100 hover:border-highlight hover:shadow-card transition-all duration-300" data-category="govt" onclick="openModal('legal')">
+                    <div class="w-12 h-12 bg-white rounded-lg flex items-center justify-center text-primary text-xl shadow-sm mb-4 group-hover:bg-primary group-hover:text-white transition-colors">
+                        <i class="fa-solid fa-gavel"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-textDark mb-2">Legal Services</h3>
+                    <p class="text-sm text-gray-600">Encumbrance certificate, land tax, and building tax payments.</p>
+                </div>
+
+                <!-- Category: Utility (utility) -->
+                <div class="service-card cursor-pointer group p-6 rounded-xl bg-bgLight border border-gray-100 hover:border-highlight hover:shadow-card transition-all duration-300" data-category="utility" onclick="openModal('travel')">
+                    <div class="w-12 h-12 bg-white rounded-lg flex items-center justify-center text-primary text-xl shadow-sm mb-4 group-hover:bg-primary group-hover:text-white transition-colors">
+                        <i class="fa-solid fa-train"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-textDark mb-2">Travel Booking</h3>
+                    <p class="text-sm text-gray-600">IRCTC train tickets, KSRTC bus booking, and flight tickets.</p>
+                </div>
+
+                <div class="service-card cursor-pointer group p-6 rounded-xl bg-bgLight border border-gray-100 hover:border-highlight hover:shadow-card transition-all duration-300" data-category="utility" onclick="openModal('bill')">
+                    <div class="w-12 h-12 bg-white rounded-lg flex items-center justify-center text-primary text-xl shadow-sm mb-4 group-hover:bg-primary group-hover:text-white transition-colors">
+                        <i class="fa-solid fa-bolt"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-textDark mb-2">Utility Payments</h3>
+                    <p class="text-sm text-gray-600">KSEB, Water Authority, BSNL landline, and mobile recharges.</p>
+                </div>
+
+                <div class="service-card cursor-pointer group p-6 rounded-xl bg-bgLight border border-gray-100 hover:border-highlight hover:shadow-card transition-all duration-300" data-category="utility" onclick="openModal('vehicle')">
+                    <div class="w-12 h-12 bg-white rounded-lg flex items-center justify-center text-primary text-xl shadow-sm mb-4 group-hover:bg-primary group-hover:text-white transition-colors">
+                        <i class="fa-solid fa-car-side"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-textDark mb-2">Vehicle Services</h3>
+                    <p class="text-sm text-gray-600">FASTag recharge, challan payments, and vehicle insurance.</p>
+                </div>
+
+                <!-- Category: Student (student) -->
+                <div class="service-card cursor-pointer group p-6 rounded-xl bg-bgLight border border-gray-100 hover:border-highlight hover:shadow-card transition-all duration-300" data-category="student" onclick="openModal('exam')">
+                    <div class="w-12 h-12 bg-white rounded-lg flex items-center justify-center text-primary text-xl shadow-sm mb-4 group-hover:bg-primary group-hover:text-white transition-colors">
+                        <i class="fa-solid fa-user-graduate"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-textDark mb-2">Entrance Exams</h3>
+                    <p class="text-sm text-gray-600">NEET, KEAM, JEE applications and admit card printing.</p>
+                </div>
+
+                <div class="service-card cursor-pointer group p-6 rounded-xl bg-bgLight border border-gray-100 hover:border-highlight hover:shadow-card transition-all duration-300" data-category="student" onclick="openModal('scholarship')">
+                    <div class="w-12 h-12 bg-white rounded-lg flex items-center justify-center text-primary text-xl shadow-sm mb-4 group-hover:bg-primary group-hover:text-white transition-colors">
+                        <i class="fa-solid fa-book-open"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-textDark mb-2">Scholarships</h3>
+                    <p class="text-sm text-gray-600">E-Grantz, National Scholarship Portal, and minority scholarships.</p>
+                </div>
+
+                <div class="service-card cursor-pointer group p-6 rounded-xl bg-bgLight border border-gray-100 hover:border-highlight hover:shadow-card transition-all duration-300" data-category="student" onclick="openModal('psc')">
+                    <div class="w-12 h-12 bg-white rounded-lg flex items-center justify-center text-primary text-xl shadow-sm mb-4 group-hover:bg-primary group-hover:text-white transition-colors">
+                        <i class="fa-solid fa-briefcase"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-textDark mb-2">PSC & Jobs</h3>
+                    <p class="text-sm text-gray-600">One-time registration, exam confirmation, and hall tickets.</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Documents Modal -->
+    <div id="serviceModal" class="modal fixed inset-0 z-[60] flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeModal()"></div>
+        <div class="modal-content relative bg-white w-full max-w-lg rounded-2xl shadow-2xl p-8 z-10 border border-white/20">
+            <button onclick="closeModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-100 hover:bg-red-100 hover:text-red-500 flex items-center justify-center transition-colors">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-bgLight rounded-full flex items-center justify-center text-primary text-2xl mx-auto mb-4">
+                    <i id="modalIcon" class="fa-solid fa-file"></i>
+                </div>
+                <h3 id="modalTitle" class="text-2xl font-bold text-textDark font-display">Service Name</h3>
+                <p class="text-gray-500 text-sm mt-1">Required Documents Checklist</p>
+            </div>
+
+            <div class="bg-bgLight rounded-xl p-6">
+                <ul id="modalList" class="space-y-3 text-gray-700">
+                    <!-- List items will be injected here -->
+                </ul>
+            </div>
+
+            <div class="mt-8 text-center">
+                <a href="#contact" onclick="closeModal()" class="inline-block px-8 py-3 bg-primary text-white font-bold rounded-lg hover:bg-highlight transition-all shadow-lg">
+                    Contact to Apply
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gallery Section (Interactive) -->
+    <section id="gallery" class="py-24 bg-textDark relative">
+        <div class="absolute inset-0 bg-primary/10"></div>
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-12">
+                <div>
+                    <h2 class="text-highlight font-bold tracking-widest uppercase mb-2">Our Center</h2>
+                    <h3 class="text-3xl md:text-5xl font-bold text-white">Visual Tour</h3>
+                </div>
+            <!--<button class="hidden md:block px-6 py-2 border border-highlight text-highlight rounded-full hover:bg-highlight hover:text-white transition-all">
+                    View Instagram
+                </button>-->
+            </div>
+
+            <!-- Dynamic Gallery Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 h-[600px] md:h-[500px]">
+                
+                <!-- Grid Slot 1 (Large) -->
+                <div class="lg:col-span-2 lg:row-span-2 relative rounded-2xl overflow-hidden group gallery-item cursor-pointer" onclick="openLightbox(0)">
+                    <img id="gallery-img-1" src="" class="gallery-img w-full h-full object-cover" alt="Gallery 1">
+                <!--<div class="overlay absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 transition-opacity duration-300 flex items-end p-8">
+                        <div><p class="text-highlight font-bold text-sm">View</p><h4 class="text-white text-xl font-bold">Facility</h4></div>
+                    </div>-->
+                </div>
+
+                <!-- Grid Slot 2 -->
+                <div class="relative rounded-2xl overflow-hidden group gallery-item cursor-pointer" onclick="openLightbox(1)">
+                    <img id="gallery-img-2" src="" class="gallery-img w-full h-full object-cover" alt="Gallery 2">
+                <!--<div class="overlay absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 transition-opacity duration-300 flex items-end p-6">
+                        <div><p class="text-highlight font-bold text-xs">View</p><h4 class="text-white text-lg font-bold">Services</h4></div>
+                    </div>-->
+                </div>
+
+                <!-- Grid Slot 3 -->
+                <div class="relative rounded-2xl overflow-hidden group gallery-item cursor-pointer" onclick="openLightbox(2)">
+                    <img id="gallery-img-3" src="" class="gallery-img w-full h-full object-cover" alt="Gallery 3">
+                <!--<div class="overlay absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 transition-opacity duration-300 flex items-end p-6">
+                        <div><p class="text-highlight font-bold text-xs">View</p><h4 class="text-white text-lg font-bold">Technology</h4></div>
+                    </div>-->
+                </div>
+
+                <!-- Grid Slot 4 (Wide) -->
+                <div class="lg:col-span-2 relative rounded-2xl overflow-hidden group gallery-item cursor-pointer" onclick="openLightbox(3)">
+                    <img id="gallery-img-4" src="" class="gallery-img w-full h-full object-cover" alt="Gallery 4">
+                <!--<div class="overlay absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 transition-opacity duration-300 flex items-end p-6">
+                        <div><p class="text-highlight font-bold text-xs">View</p><h4 class="text-white text-lg font-bold">Our Team</h4></div>
+                    </div>-->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Faculty/Team Section (UPDATED) -->
+    <section id="team" class="py-16 bg-white border-t border-gray-100 overflow-hidden pause-on-hover">
+        <div class="container mx-auto px-6 text-center mb-10">
+            <span class="text-primary font-bold tracking-widest uppercase text-xs">The Experts</span>
+            <h2 class="text-3xl font-display font-bold text-textDark mt-1">Meet Our Team</h2>
+        </div>
+
+        <!-- Scroll Container -->
+        <div class="relative w-full">
+            <!-- Fade Gradients -->
+            <div class="absolute left-0 top-0 bottom-0 w-24 z-10 bg-gradient-to-r from-white to-transparent pointer-events-none"></div>
+            <div class="absolute right-0 top-0 bottom-0 w-24 z-10 bg-gradient-to-l from-white to-transparent pointer-events-none"></div>
+
+            <div class="animate-marquee flex gap-16 px-4 items-center">
+                <!-- Original Set -->
+                <div class="flex flex-col items-center flex-shrink-0 w-40 group cursor-pointer">
+                    <div class="w-24 h-24 rounded-full overflow-hidden border-4 border-bgLight shadow-md group-hover:scale-110 transition-transform duration-300 mb-3 relative">
+                         <img src="https://placehold.co/150x150/042332/FFFFFF/png?text=Nisha" alt="Nisha" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="font-bold text-textDark text-lg leading-tight">Nisha M P</h3>
+                <!--<p class="text-primary text-xs font-semibold uppercase tracking-wide">Centre Head</p>-->
+                </div>
+                
+                <div class="flex flex-col items-center flex-shrink-0 w-40 group cursor-pointer">
+                     <div class="w-24 h-24 rounded-full overflow-hidden border-4 border-bgLight shadow-md group-hover:scale-110 transition-transform duration-300 mb-3 relative">
+                         <img src="https://placehold.co/150x150/413f94/FFFFFF/png?text=Shini" alt="Shini" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="font-bold text-textDark text-lg leading-tight">Shini</h3>
+                <!--<p class="text-primary text-xs font-semibold uppercase tracking-wide">Senior Operator</p>-->
+                </div>
+                
+                <div class="flex flex-col items-center flex-shrink-0 w-40 group cursor-pointer">
+                     <div class="w-24 h-24 rounded-full overflow-hidden border-4 border-bgLight shadow-md group-hover:scale-110 transition-transform duration-300 mb-3 relative">
+                         <img src="https://placehold.co/150x150/0e9ce0/FFFFFF/png?text=Rajani" alt="Rajani" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="font-bold text-textDark text-lg leading-tight">Rajani T</h3>
+                <!--<p class="text-primary text-xs font-semibold uppercase tracking-wide">Tech Support</p>-->
+                </div>
+
+                <div class="flex flex-col items-center flex-shrink-0 w-40 group cursor-pointer">
+                     <div class="w-24 h-24 rounded-full overflow-hidden border-4 border-bgLight shadow-md group-hover:scale-110 transition-transform duration-300 mb-3 relative">
+                         <img src="https://placehold.co/150x150/6b7280/FFFFFF/png?text=Vinaya" alt="Vinaya" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="font-bold text-textDark text-lg leading-tight">Vinaya P C</h3>
+                <!--<p class="text-primary text-xs font-semibold uppercase tracking-wide">Front Desk</p>-->
+                </div>
+
+                 <div class="flex flex-col items-center flex-shrink-0 w-40 group cursor-pointer">
+                     <div class="w-24 h-24 rounded-full overflow-hidden border-4 border-bgLight shadow-md group-hover:scale-110 transition-transform duration-300 mb-3 relative">
+                         <img src="https://placehold.co/150x150/413f94/FFFFFF/png?text=Jayasree" alt="Jayasree" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="font-bold text-textDark text-lg leading-tight">Jayasree</h3>
+                <!--<p class="text-primary text-xs font-semibold uppercase tracking-wide">Operator</p>-->
+                </div>
+
+                <!-- Duplicate Set for Seamless Loop -->
+                 <div class="flex flex-col items-center flex-shrink-0 w-40 group cursor-pointer">
+                    <div class="w-24 h-24 rounded-full overflow-hidden border-4 border-bgLight shadow-md group-hover:scale-110 transition-transform duration-300 mb-3 relative">
+                         <img src="https://placehold.co/150x150/042332/FFFFFF/png?text=Nisha" alt="Nisha" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="font-bold text-textDark text-lg leading-tight">Nisha M P</h3>
+                <!--<p class="text-primary text-xs font-semibold uppercase tracking-wide">Centre Head</p>-->
+                </div>
+                
+                <div class="flex flex-col items-center flex-shrink-0 w-40 group cursor-pointer">
+                     <div class="w-24 h-24 rounded-full overflow-hidden border-4 border-bgLight shadow-md group-hover:scale-110 transition-transform duration-300 mb-3 relative">
+                         <img src="https://placehold.co/150x150/413f94/FFFFFF/png?text=Shini" alt="Shini" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="font-bold text-textDark text-lg leading-tight">Shini</h3>
+                <!--<p class="text-primary text-xs font-semibold uppercase tracking-wide">Senior Operator</p>-->
+                </div>
+                
+                <div class="flex flex-col items-center flex-shrink-0 w-40 group cursor-pointer">
+                     <div class="w-24 h-24 rounded-full overflow-hidden border-4 border-bgLight shadow-md group-hover:scale-110 transition-transform duration-300 mb-3 relative">
+                         <img src="https://placehold.co/150x150/0e9ce0/FFFFFF/png?text=Rajani" alt="Rajani" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="font-bold text-textDark text-lg leading-tight">Rajani T</h3>
+                <!--<p class="text-primary text-xs font-semibold uppercase tracking-wide">Tech Support</p>-->
+                </div>
+
+                <div class="flex flex-col items-center flex-shrink-0 w-40 group cursor-pointer">
+                     <div class="w-24 h-24 rounded-full overflow-hidden border-4 border-bgLight shadow-md group-hover:scale-110 transition-transform duration-300 mb-3 relative">
+                         <img src="https://placehold.co/150x150/6b7280/FFFFFF/png?text=Vinaya" alt="Vinaya" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="font-bold text-textDark text-lg leading-tight">Vinaya P C</h3>
+                <!--<p class="text-primary text-xs font-semibold uppercase tracking-wide">Front Desk</p>-->
+                </div>
+
+                 <div class="flex flex-col items-center flex-shrink-0 w-40 group cursor-pointer">
+                     <div class="w-24 h-24 rounded-full overflow-hidden border-4 border-bgLight shadow-md group-hover:scale-110 transition-transform duration-300 mb-3 relative">
+                         <img src="https://placehold.co/150x150/413f94/FFFFFF/png?text=Jayasree" alt="Jayasree" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="font-bold text-textDark text-lg leading-tight">Jayasree</h3>
+                <!--<p class="text-primary text-xs font-semibold uppercase tracking-wide">Operator</p>-->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Lightbox Modal -->
+    <div id="lightbox" class="modal fixed inset-0 z-[70] flex items-center justify-center">
+        <button onclick="closeLightbox()" class="absolute top-6 right-6 text-white text-4xl hover:text-highlight transition-colors z-[80]">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <button onclick="prevImage()" class="absolute left-4 text-white text-4xl hover:text-highlight transition-colors p-4 z-[80]">
+            <i class="fa-solid fa-chevron-left"></i>
+        </button>
+        <button onclick="nextImage()" class="absolute right-4 text-white text-4xl hover:text-highlight transition-colors p-4 z-[80]">
+            <i class="fa-solid fa-chevron-right"></i>
+        </button>
+        
+        <div class="relative max-w-5xl max-h-[90vh]">
+            <img id="lightbox-img" src="" class="max-w-full max-h-[80vh] rounded-lg shadow-2xl" alt="Full View">
+            <p id="lightbox-caption" class="text-center text-white mt-4 font-display tracking-widest"></p>
+        </div>
+    </div>
+
+    <!-- Feedback Section (UPDATED with Google Review Animation) -->
+    <section id="feedback" class="py-24 bg-bgLight">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+                <!-- Left: Animated Google Reviews -->
+                <div>
+                    <h2 class="text-3xl font-display font-bold text-textDark mb-2">What Citizens Say</h2>
+                    
+                    <!-- Google Branding Summary -->
+                    <div class="flex items-center gap-3 mb-8 bg-white w-fit px-4 py-2 rounded-full shadow-sm">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" class="w-6 h-6" alt="Google">
+                        <span class="font-bold text-gray-700 text-lg">4.6</span>
+                        <div class="flex text-[#F4B400] text-sm">
+                             <i class="fa-solid fa-star"></i>
+                             <i class="fa-solid fa-star"></i>
+                             <i class="fa-solid fa-star"></i>
+                             <i class="fa-solid fa-star"></i>
+                             <i class="fa-solid fa-star-half-stroke"></i>
+                        </div>
+                    <!--<span class="text-gray-400 text-sm font-semibold border-l pl-3 border-gray-200">120+ Reviews</span>-->
+                    </div>
+
+                    <!-- Review Animation Container -->
+                    <div class="relative h-64"> 
+                        <div id="review-card" class="bg-white p-8 rounded-2xl shadow-lg border border-gray-100 relative min-h-[200px] flex flex-col justify-center">
+                            <!-- Background Quote Icon -->
+                            <i class="fa-solid fa-quote-right absolute top-6 right-6 text-5xl text-gray-100/50"></i>
+                            
+                            <!-- Dynamic Content injected via JS -->
+                            <div id="review-content" class="relative z-10">
+                                <!-- Content will be populated by JS -->
+                            </div>
+                        </div>
+                        
+                        <!-- Indicators (Dots) -->
+                        <div class="flex gap-2 mt-6 justify-center" id="review-dots">
+                            <!-- Dots injected via JS -->
+                        </div>
+                        
+                        <!-- NEW: View on Google Maps Button -->
+                         <div class="mt-8">
+                             <a href="#" id="google-maps-btn" target="_blank" class="inline-flex items-center gap-2 text-primary font-bold hover:text-highlight transition-colors">
+                                 <i class="fa-solid fa-map-location-dot"></i>
+                                 View all reviews on Google Maps
+                             </a>
+                         </div>
+                    </div>
+                </div>
+
+                <!-- Right: Submission Form -->
+                <div class="bg-white p-8 rounded-2xl shadow-card border-t-4 border-primary h-fit">
+                    <h3 class="text-2xl font-bold text-textDark mb-2">Leave a Review</h3>
+                    <p class="text-gray-500 mb-6 text-sm">Your feedback helps us improve our services.</p>
+                    
+                    <form onsubmit="event.preventDefault(); alert('Internal error, Sorry for the inconvenience');" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-1">Your Name</label>
+                            <input type="text" class="w-full px-4 py-3 rounded-lg bg-bgLight border-none focus:ring-2 focus:ring-primary outline-none transition-all" placeholder="John Doe">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-1">Rating</label>
+                            <div class="star-rating justify-end w-fit">
+                                <input type="radio" id="star5" name="rating" value="5" /><label for="star5" title="5 stars"><i class="fa-solid fa-star"></i></label>
+                                <input type="radio" id="star4" name="rating" value="4" /><label for="star4" title="4 stars"><i class="fa-solid fa-star"></i></label>
+                                <input type="radio" id="star3" name="rating" value="3" /><label for="star3" title="3 stars"><i class="fa-solid fa-star"></i></label>
+                                <input type="radio" id="star2" name="rating" value="2" /><label for="star2" title="2 stars"><i class="fa-solid fa-star"></i></label>
+                                <input type="radio" id="star1" name="rating" value="1" /><label for="star1" title="1 star"><i class="fa-solid fa-star"></i></label>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-1">Comment</label>
+                            <textarea rows="4" class="w-full px-4 py-3 rounded-lg bg-bgLight border-none focus:ring-2 focus:ring-primary outline-none transition-all" placeholder="Tell us about your experience..."></textarea>
+                        </div>
+
+                        <button type="submit" class="w-full py-4 bg-primary text-white font-bold rounded-lg hover:bg-highlight transition-colors shadow-lg">
+                            Submit Feedback
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Need Assistance Section -->
+    <section class="py-16 bg-gradient-to-r from-primary to-textDark text-white">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-3xl md:text-4xl font-display font-bold mb-6">Need Assistance with a Service?</h2>
+            <p class="text-lg text-gray-300 mb-8 max-w-2xl mx-auto">
+                Not sure which documents to bring? Or need to schedule an appointment for Aadhaar services? 
+                Our support team is just a message away.
+            </p>
+            <a href="https://wa.me/918547802350" target="_blank" class="inline-flex items-center gap-3 px-8 py-4 bg-[#25d366] text-white font-bold rounded-full hover:bg-white hover:text-[#25d366] transition-all shadow-lg transform hover:-translate-y-1">
+                <i class="fa-brands fa-whatsapp text-2xl"></i>
+                <span>Chat with Us on WhatsApp</span>
+            </a>
+        </div>
+    </section>
+
+    <!-- NEW: Strategic Partners Section -->
+    <section id="partners" class="py-16 bg-white border-b border-gray-100 overflow-hidden pause-on-hover">
+        <!--<div class="container mx-auto px-6 text-center mb-10">
+            <span class="text-gray-400 font-bold tracking-widest uppercase text-xs">Official Integrations</span>
+            <h2 class="text-2xl font-display font-bold text-textDark mt-1">Our Strategic Partners</h2>
+        </div>-->
+
+        <div class="relative w-full mask-gradient-x">
+             <div class="animate-marquee flex gap-16 px-4 items-center">
+                <!-- Partner Items -->
+                 <div class="flex flex-col items-center flex-shrink-0 w-32 group">
+                    <div class="w-20 h-20 rounded-2xl bg-white border border-gray-100 shadow-md flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                         <i class="fa-solid text-4xl text-blue-600">
+                            <img src="https://gad.kerala.gov.in/sites/default/files/inline-images/kerala%20final%20emblem_0.jpg" alt="" class="w-full h-full object-cover">
+                         </i>
+                    </div>
+                <!--<p class="mt-3 text-xs font-bold text-gray-500 uppercase">UIDAI</p>-->
+                </div>
+
+                <div class="flex flex-col items-center flex-shrink-0 w-32 group">
+                    <div class="w-20 h-20 rounded-2xl bg-white border border-gray-100 shadow-md flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                         <i class="fa-solid text-4xl text-blue-600">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/It-mission.png" alt="" class="w-full h-full object-cover">
+                         </i>
+                    </div>
+                <!--<p class="mt-3 text-xs font-bold text-gray-500 uppercase">UIDAI</p>-->
+                </div>
+
+                <div class="flex flex-col items-center flex-shrink-0 w-32 group">
+                    <div class="w-20 h-20 rounded-2xl bg-white border border-gray-100 shadow-md flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                         <i class="fa-solid text-4xl text-blue-600">
+                            <img src="https://pnghdpro.com/wp-content/themes/pnghdpro/download/social-media-and-brands/digital-india-logo-hd.png" alt="" class="w-full h-full object-cover">
+                         </i>
+                    </div>
+                <!--<p class="mt-3 text-xs font-bold text-gray-500 uppercase">UIDAI</p>-->
+                </div>
+
+                <div class="flex flex-col items-center flex-shrink-0 w-32 group">
+                    <div class="w-20 h-20 rounded-2xl bg-white border border-gray-100 shadow-md flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                         <i class="fa-solid text-4xl text-blue-600">
+                            <img src="https://upload.wikimedia.org/wikipedia/en/thumb/c/cf/Aadhaar_Logo.svg/1200px-Aadhaar_Logo.svg.png" alt="" class="w-full h-full object-cover">
+                         </i>
+                    </div>
+                <!--<p class="mt-3 text-xs font-bold text-gray-500 uppercase">UIDAI</p>-->
+                </div>
+
+                <div class="flex flex-col items-center flex-shrink-0 w-32 group">
+                    <div class="w-20 h-20 rounded-2xl bg-white border border-gray-100 shadow-md flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                         <i class="fa-solid text-4xl text-blue-600">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Logo_of_Common_Service_Centres.svg/2560px-Logo_of_Common_Service_Centres.svg.png" alt="" class="w-full h-full object-cover">
+                         </i>
+                    </div>
+                <!--<p class="mt-3 text-xs font-bold text-gray-500 uppercase">UIDAI</p>-->
+                </div>
+
+
+                <!-- Duplicate for Loop -->
+                 <div class="flex flex-col items-center flex-shrink-0 w-32 group">
+                    <div class="w-20 h-20 rounded-2xl bg-white border border-gray-100 shadow-md flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                         <i class="fa-solid text-4xl text-blue-600">
+                            <img src="https://gad.kerala.gov.in/sites/default/files/inline-images/kerala%20final%20emblem_0.jpg" alt="" class="w-full h-full object-cover">
+                         </i>
+                    </div>
+                <!--<p class="mt-3 text-xs font-bold text-gray-500 uppercase">UIDAI</p>-->
+                </div>
+
+                <div class="flex flex-col items-center flex-shrink-0 w-32 group">
+                    <div class="w-20 h-20 rounded-2xl bg-white border border-gray-100 shadow-md flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                         <i class="fa-solid text-4xl text-blue-600">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/It-mission.png" alt="" class="w-full h-full object-cover">
+                         </i>
+                    </div>
+                <!--<p class="mt-3 text-xs font-bold text-gray-500 uppercase">UIDAI</p>-->
+                </div>
+
+                <div class="flex flex-col items-center flex-shrink-0 w-32 group">
+                    <div class="w-20 h-20 rounded-2xl bg-white border border-gray-100 shadow-md flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                         <i class="fa-solid text-4xl text-blue-600">
+                            <img src="https://pnghdpro.com/wp-content/themes/pnghdpro/download/social-media-and-brands/digital-india-logo-hd.png" alt="" class="w-full h-full object-cover">
+                         </i>
+                    </div>
+                <!--<p class="mt-3 text-xs font-bold text-gray-500 uppercase">UIDAI</p>-->
+                </div>
+
+                <div class="flex flex-col items-center flex-shrink-0 w-32 group">
+                    <div class="w-20 h-20 rounded-2xl bg-white border border-gray-100 shadow-md flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                         <i class="fa-solid text-4xl text-blue-600">
+                            <img src="https://upload.wikimedia.org/wikipedia/en/thumb/c/cf/Aadhaar_Logo.svg/1200px-Aadhaar_Logo.svg.png" alt="" class="w-full h-full object-cover">
+                         </i>
+                    </div>
+                <!--<p class="mt-3 text-xs font-bold text-gray-500 uppercase">UIDAI</p>-->
+                </div>
+
+                <div class="flex flex-col items-center flex-shrink-0 w-32 group">
+                    <div class="w-20 h-20 rounded-2xl bg-white border border-gray-100 shadow-md flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                         <i class="fa-solid text-4xl text-blue-600">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Logo_of_Common_Service_Centres.svg/2560px-Logo_of_Common_Service_Centres.svg.png" alt="" class="w-full h-full object-cover">
+                         </i>
+                    </div>
+                <!--<p class="mt-3 text-xs font-bold text-gray-500 uppercase">UIDAI</p>-->
+                </div>
+
+             </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact" class="bg-textDark text-white pt-20 pb-10">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+                <!-- Brand -->
+                <div>
+                    <a href="#" class="flex items-center gap-3 group">
+                    <div>
+                        <img
+                        class="navbar-logo"
+                         src="https://images.seeklogo.com/logo-png/32/2/akshaya-logo-png_seeklogo-324113.png"
+                         alt="Logo"
+                         style="width: 50px;"
+                         />
+                        </div>
+                        <div class="flex flex-col">
+                        <span class="text-2xl font-display font-bold tracking-tight text-textlight leading-none">
+                            AKSHAYA E CENTRE</span>
+                        </span>
+                        <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 group-hover:text-primary transition-colors duration-300 mt-1">Chandappura | KNR009</span>
+                    </div>
+                </a>
+                    <p class="text-gray-400 mb-6 text-sm leading-relaxed">
+                        Akshaya is the gateway to digital India. We provide over 100+ G2C and B2C services with transparency and efficiency.
+                    </p>
+                    <div class="flex gap-4">
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary transition-colors border border-white/10"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary transition-colors border border-white/10"><i class="fa-brands fa-whatsapp"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary transition-colors border border-white/10"><i class="fa-brands fa-instagram"></i></a>
+                    </div>
+                </div>
+
+                <!-- Contact Info -->
+                <div>
+                    <h4 class="text-lg font-bold mb-6 text-highlight">Quick Contact</h4>
+                    <ul class="space-y-4 text-gray-400 text-sm">
+                        <li class="flex items-start gap-3">
+                            <i class="fa-solid fa-location-dot mt-1 text-highlight"></i>
+                            <span>Chandappura,<br> Pilathara - Mathamangalam Road,<br>Kadannappally, Kerala 670504</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fa-solid fa-phone text-highlight"></i>
+                            <span>+91 85478 02350<br>+91 94475 19350</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fa-solid fa-envelope text-highlight"></i>
+                            <span>akshayakn984@gmail.com</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Links -->
+                <div>
+                    <h4 class="text-lg font-bold mb-6 text-highlight">Services</h4>
+                    <ul class="space-y-3 text-gray-400 text-sm">
+                        <li><a href="#" class="hover:text-white transition-colors">Aadhaar Enrollment</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Passport Seva</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Pan Card</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Utility Payments</a></li>
+                    </ul>
+                </div>
+
+                <!-- Hours -->
+                <div>
+                    <h4 class="text-lg font-bold mb-6 text-highlight">Working Hours</h4>
+                    <ul class="space-y-3 text-gray-400 text-sm">
+                        <li class="flex justify-between border-b border-gray-800 pb-2">
+                            <span>Mon - Sat:</span>
+                            <span class="text-white">9:30 AM - 6:00 PM</span>
+                        </li>
+                        <li class="flex justify-between border-b border-gray-800 pb-2">
+                            <span>Second Saturday:</span>
+                            <span class="text-white">9:30 AM - 4:30 PM</span>
+                        </li>
+                        <li class="flex justify-between">
+                            <span>Sunday:</span>
+                            <span class="text-highlight">Holiday</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+             <div class="border-t border-gray-800 pt-8 text-center text-gray-500 text-xs">
+                <p>&copy; 2025 Akshaya Centre Chandappura. All rights reserved. |   Designed by <a href="https://www.instagram.com/ideacopa?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" class="text-white">IdeaCopa</a></p>
+            </div>
+            
+        </div>
+    </footer>
+
+    <!-- WhatsApp Floating Button -->
+    <a href="https://wa.me/918547802350" target="_blank" class="whatsapp-float">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('shadow-lg');
+                navbar.classList.remove('py-4');
+                navbar.classList.add('py-2');
+            } else {
+                navbar.classList.remove('shadow-lg', 'py-2');
+                navbar.classList.add('py-4');
+            }
+        });
+
+        // Mobile Menu
+        const menuBtn = document.getElementById('menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        let isMenuOpen = false;
+
+        menuBtn.addEventListener('click', () => {
+            isMenuOpen = !isMenuOpen;
+            if (isMenuOpen) {
+                mobileMenu.classList.remove('-translate-y-[150%]');
+                menuBtn.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+            } else {
+                mobileMenu.classList.add('-translate-y-[150%]');
+                menuBtn.innerHTML = '<i class="fa-solid fa-bars-staggered"></i>';
+            }
+        });
+
+        // ------------------ Service Data & Modal Logic ------------------
+
+        const serviceRequirements = {
+            'aadhaar': {
+                title: 'Aadhaar Services',
+                icon: 'fa-fingerprint',
+                docs: [
+                    'Current Aadhaar Number / Enrolment Slip',
+                    'Biometric Update: No documents for children < 5 years',
+                    'Address Change: Passport / Voter ID / Ration Card / Bank Passbook',
+                    'Mobile Linking: Active Mobile with OTP',
+                    'DOB Correction: Birth Certificate / SSLC Book'
+                ]
+            },
+            'voter': {
+                title: 'Voter ID Services',
+                icon: 'fa-address-card',
+                docs: [
+                    'Passport Size Photo',
+                    'Age Proof: Birth Certificate / SSLC / Pan Card',
+                    'Address Proof: Ration Card / Aadhaar / Water Bill',
+                    'Guardian Details (for new registration)'
+                ]
+            },
+            'passport': {
+                title: 'Passport Seva',
+                icon: 'fa-passport',
+                docs: [
+                    'SSLC Certificate (Original) for ECR Check',
+                    'Aadhaar Card (Name & DOB must match SSLC)',
+                    'Voter ID / Driving License (Optional)',
+                    'Birth Certificate (For minors below 18)',
+                    'Marriage Certificate (If spouse name to be added)'
+                ]
+            },
+            'pancard': {
+                title: 'PAN Card Services',
+                icon: 'fa-id-card',
+                docs: [
+                    '2 Recent Passport Size Photos',
+                    'Aadhaar Card (Mandatory)',
+                    'Existing PAN Copy (For corrections)',
+                    'Proof of Identity & Address'
+                ]
+            },
+            'edistrict': {
+                title: 'E-District Certificates',
+                icon: 'fa-file-contract',
+                docs: [
+                    'Aadhaar Card of Applicant',
+                    'Ration Card Copy',
+                    'Land Tax Receipt (Current Year)',
+                    'School Certificate (for Caste/Community)',
+                    'Salary Certificate (for Income Certificate)'
+                ]
+            },
+            'ration': {
+                title: 'Ration Card Services',
+                icon: 'fa-bowl-food',
+                docs: [
+                    'Aadhaar Cards of all members to be added/corrected',
+                    'Current Ration Card (Original)',
+                    'Income Certificate (For BPL conversion)',
+                    'Reduction Certificate (If coming from another card)'
+                ]
+            },
+            'legal': {
+                title: 'Legal & Land Services',
+                icon: 'fa-gavel',
+                docs: [
+                    'Previous Land Tax Receipt',
+                    'Thandaper Number',
+                    'Aadhaar Card of Land Owner',
+                    'Building Number & Ward Details (For building tax)'
+                ]
+            },
+            'travel': {
+                title: 'Travel Booking',
+                icon: 'fa-train',
+                docs: [
+                    'ID Proof of all Passengers (Aadhaar/Voter ID)',
+                    'Travel Date & Destination',
+                    'Mobile Number for SMS Ticket'
+                ]
+            },
+            'bill': {
+                title: 'Utility Payments',
+                icon: 'fa-bolt',
+                docs: [
+                    'Consumer Number / Customer ID',
+                    'Previous Bill Copy',
+                    'Mobile Number'
+                ]
+            },
+            'vehicle': {
+                title: 'Vehicle Services',
+                icon: 'fa-car-side',
+                docs: [
+                    'RC Book (Registration Certificate)',
+                    'Previous Insurance Policy Copy',
+                    'Challan Number (For fine payment)'
+                ]
+            },
+            'exam': {
+                title: 'Entrance Exams',
+                icon: 'fa-user-graduate',
+                docs: [
+                    'SSLC / Plus Two Marksheets',
+                    'Scanned Photo & Signature',
+                    'Aadhaar Card',
+                    'Mobile Number & Email ID',
+                    'Income & Caste Certificate (If applicable)'
+                ]
+            },
+            'scholarship': {
+                title: 'Scholarship Applications',
+                icon: 'fa-book-open',
+                docs: [
+                    'Admission Number & Year',
+                    'Bank Passbook Copy (Student Name)',
+                    'Aadhaar Card',
+                    'Income & Community Certificate',
+                    'Previous Year Marksheet'
+                ]
+            },
+            'psc': {
+                title: 'PSC & Job Applications',
+                icon: 'fa-briefcase',
+                docs: [
+                    'User ID & Password (If registered)',
+                    'Photo with Date & Name (As per specification)',
+                    'SSLC Book Details',
+                    'Experience Certificate (If any)'
+                ]
+            }
+        };
+
+        function openModal(serviceKey) {
+            const modal = document.getElementById('serviceModal');
+            const data = serviceRequirements[serviceKey];
+            
+            if (data) {
+                document.getElementById('modalTitle').innerText = data.title;
+                document.getElementById('modalIcon').className = `fa-solid ${data.icon}`;
+                
+                const list = document.getElementById('modalList');
+                list.innerHTML = '';
+                
+                data.docs.forEach(doc => {
+                    const li = document.createElement('li');
+                    li.className = 'flex items-start gap-3';
+                    li.innerHTML = `<i class="fa-solid fa-check text-highlight mt-1"></i><span>${doc}</span>`;
+                    list.appendChild(li);
+                });
+
+                modal.classList.add('active');
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('serviceModal').classList.remove('active');
+        }
+
+        // ------------------ Tab Logic ------------------
+
+        function switchTab(category) {
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                if(btn.dataset.category === category) {
+                    btn.classList.add('bg-primary', 'text-white');
+                    btn.classList.remove('text-gray-600');
+                } else {
+                    btn.classList.remove('bg-primary', 'text-white');
+                    btn.classList.add('text-gray-600');
+                }
+            });
+
+            const items = document.querySelectorAll('#services-grid > div');
+            
+            const timeline = gsap.timeline();
+
+            timeline.to(items, {
+                opacity: 0,
+                y: 20,
+                duration: 0.2,
+                stagger: 0.05,
+                onComplete: () => {
+                    items.forEach(item => {
+                        if (category === 'all' || item.dataset.category === category) {
+                            item.style.display = 'block';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                }
+            });
+
+            timeline.to(items, {
+                opacity: 1,
+                y: 0,
+                duration: 0.3,
+                stagger: 0.05,
+                clearProps: "all" 
+            });
+        }
+
+        // ------------------ Interactive Gallery Logic ------------------
+        
+        // Define your folder of images here
+        const galleryPool = [
+            "https://lh3.googleusercontent.com/p/AF1QipPthR-dO1LD1ejbZVInVNzCa9T6HKCDQiNoVsq2=s1360-w1360-h1020",
+            "https://lh3.googleusercontent.com/gps-cs-s/AG0ilSzIqaY6fWgDsvVG_EABOuyUmEStHz6dSkBxoZH1GDD-be2wARp5n7gOUgnwdAF6ExgRFpdA_2aEW9XURQLLfl9GLCVSSIAnZPTbWEpuzf3S5zzZy4EeOmUXz3bWawbiYNSqqqs=s1360-w1360-h1020",
+            "https://lh3.googleusercontent.com/gps-cs-s/AG0ilSyGT791MYIO17Jwt7Rv4hXyCfbsRVqQOeKq8OnVAjv9l_wy_GXfSkyIi04GjCedvHVb1kXJo5juX-emC0NF3xqT4K5GdtdIOydVncHNwo7j5qFBR_dkNoqUXR2H7XF_AecHKWeHDw=s1360-w1360-h1020",
+            "https://lh3.googleusercontent.com/p/AF1QipPQg3qfLOd9XRcu7Fm8Y72QZF5fHz_lNVtydACd=s1360-w1360-h1020",
+            "https://lh3.googleusercontent.com/gps-cs-s/AG0ilSw8fuTpg36xnbx0un1glJyHcwhOtNnhtUjDRjOJ0E-c82sloChpFI0O6eGSLVT79iGk7yQGdwHDAZX_3HlAX9vvPN1CAGvVfYYdfxvlO9I4YUchQiAZDYuSmTmFHqOYH0ITdy0TTg=s1360-w1360-h1020",
+            "https://lh3.googleusercontent.com/gps-cs-s/AG0ilSxaVjisbh-1mG35EYPubqixO0dPojzzU6rUPHON2LvP1ZKn-UIpDGSzIjFUvKNiWuMwwAFnUflhZfb1JsVF_LMoL0NleA1_oXQwslbzO3weqjJrlIi1mhxDwYcGwZUej4nqVdaUeA=s1360-w1360-h1020",
+        ];
+
+        // Assign initial images
+        const gridSlots = ['gallery-img-1', 'gallery-img-2', 'gallery-img-3', 'gallery-img-4'];
+        let gridState = [0, 1, 2, 3]; // indices from galleryPool currently shown
+
+        function updateGridImage(slotIndex, poolIndex) {
+            const imgEl = document.getElementById(gridSlots[slotIndex]);
+            // Simple fade effect
+            gsap.to(imgEl, { opacity: 0, duration: 0.5, onComplete: () => {
+                imgEl.src = galleryPool[poolIndex];
+                gsap.to(imgEl, { opacity: 1, duration: 0.5 });
+            }});
+            gridState[slotIndex] = poolIndex;
+        }
+
+        // Initialize
+        gridSlots.forEach((id, i) => {
+            document.getElementById(id).src = galleryPool[i];
+        });
+
+        // Set different intervals for each slot to change
+        // Slot 0 changes every 3000ms
+        setInterval(() => {
+            let nextIndex = Math.floor(Math.random() * galleryPool.length);
+            updateGridImage(0, nextIndex);
+        }, 3000);
+
+        // Slot 1 changes every 4500ms
+        setInterval(() => {
+            let nextIndex = Math.floor(Math.random() * galleryPool.length);
+            updateGridImage(1, nextIndex);
+        }, 4500);
+
+         // Slot 2 changes every 5200ms
+         setInterval(() => {
+            let nextIndex = Math.floor(Math.random() * galleryPool.length);
+            updateGridImage(2, nextIndex);
+        }, 5200);
+
+         // Slot 3 changes every 6000ms
+         setInterval(() => {
+            let nextIndex = Math.floor(Math.random() * galleryPool.length);
+            updateGridImage(3, nextIndex);
+        }, 6000);
+
+
+        // ------------------ Lightbox Logic ------------------
+        let currentLightboxIndex = 0;
+
+        function openLightbox(gridIndex) {
+            // gridIndex is 0-3 (which slot was clicked)
+            // We need to find which ACTUAL image index from pool is there
+            let poolIndex = gridState[gridIndex];
+            currentLightboxIndex = poolIndex;
+            updateLightboxContent();
+            
+            const lightbox = document.getElementById('lightbox');
+            lightbox.classList.add('active');
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+        }
+
+        function updateLightboxContent() {
+            const img = document.getElementById('lightbox-img');
+            img.src = galleryPool[currentLightboxIndex];
+            // Optional: Extract caption from URL text for demo purposes
+            const caption = galleryPool[currentLightboxIndex].split('?text=')[1].replace(/\+/g, ' ');
+            document.getElementById('lightbox-caption').innerText = caption;
+        }
+
+        function nextImage() {
+            currentLightboxIndex = (currentLightboxIndex + 1) % galleryPool.length;
+            updateLightboxContent();
+        }
+
+        function prevImage() {
+            currentLightboxIndex = (currentLightboxIndex - 1 + galleryPool.length) % galleryPool.length;
+            updateLightboxContent();
+        }
+
+        // ------------------ Google Review Animation Logic ------------------
+
+        /* --- REAL REVIEWS CONFIGURATION START --- */
+        // TODO: PASTE YOUR GOOGLE MAPS LINK HERE
+        const GOOGLE_MAPS_LINK = "https://maps.app.goo.gl/1amg1WQXNLMD1Fi16"; 
+        
+        // TODO: REPLACE THE BELOW DATA WITH YOUR REAL GOOGLE REVIEWS MANUALLY
+        // If you want real-time syncing, you need a paid Google Places API key or a Widget service.
+        const googleReviews = [
+            {
+                name: "Krishna Prasad",
+                avatar: "K",
+                color: "bg-blue-100 text-blue-600",
+                stars: 5,
+                text: "Supportive, well behaved staff",
+                time: ""
+            },
+            {
+                name: "Rajesh Kumar",
+                avatar: "R",
+                color: "bg-red-100 text-red-600",
+                stars: 4,
+                text: "Spacious, good staff",
+                time: ""
+            },
+            {
+                name: "Bay Kitchen Om",
+                avatar: "B",
+                color: "bg-green-100 text-green-600",
+                stars: 5,
+                text: "Very Friendly Staff",
+                time: ""
+            },
+            {
+                name: "Saju Antony",
+                avatar: "S",
+                color: "bg-purple-100 text-purple-600",
+                stars: 5,
+                text: "മികച്ച സേവനം",
+                time: ""
+            }
+        ];
+        /* --- REAL REVIEWS CONFIGURATION END --- */
+
+        let currentReviewIndex = 0;
+
+        function updateReviewHTML(review) {
+            const starsHTML = Array(review.stars).fill('<i class="fa-solid fa-star"></i>').join('');
+            
+            return `
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="w-12 h-12 rounded-full ${review.color} flex items-center justify-center font-bold text-lg">
+                        ${review.avatar}
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-textDark">${review.name}</h4>
+                        <p class="text-xs text-gray-400">${review.time}</p>
+                    </div>
+                    
+                </div>
+                <div class="flex text-[#F4B400] text-sm mb-3">
+                    ${starsHTML}
+                </div>
+                <p class="text-gray-600 italic leading-relaxed">"${review.text}"</p>
+            `;
+        }
+
+        function animateReviews() {
+            const container = document.getElementById('review-content');
+            const dotsContainer = document.getElementById('review-dots');
+            
+            // Set Link
+            const mapBtn = document.getElementById('google-maps-btn');
+            if(mapBtn) mapBtn.href = GOOGLE_MAPS_LINK;
+
+            // Initial Render
+            container.innerHTML = updateReviewHTML(googleReviews[0]);
+            renderDots(0);
+
+            // Loop
+            setInterval(() => {
+                // Animate Out
+                gsap.to(container, { opacity: 0, y: -20, duration: 0.5, onComplete: () => {
+                    currentReviewIndex = (currentReviewIndex + 1) % googleReviews.length;
+                    
+                    // Update Content
+                    container.innerHTML = updateReviewHTML(googleReviews[currentReviewIndex]);
+                    renderDots(currentReviewIndex);
+                    
+                    // Reset Position
+                    gsap.set(container, { y: 20 });
+                    
+                    // Animate In
+                    gsap.to(container, { opacity: 1, y: 0, duration: 0.5 });
+                }});
+            }, 5000); // Change every 5 seconds
+        }
+
+        function renderDots(activeIndex) {
+            const dotsContainer = document.getElementById('review-dots');
+            dotsContainer.innerHTML = googleReviews.map((_, i) => `
+                <div class="w-2 h-2 rounded-full transition-all duration-300 ${i === activeIndex ? 'bg-primary w-6' : 'bg-gray-300'}"></div>
+            `).join('');
+        }
+
+        // GSAP Animations (General)
+        document.addEventListener("DOMContentLoaded", (event) => {
+            gsap.registerPlugin(ScrollTrigger);
+
+            gsap.from(".hero-text > *", {
+                y: 50,
+                opacity: 0,
+                duration: 1,
+                stagger: 0.1,
+                ease: "power3.out"
+            });
+
+            gsap.from("#feedback .bg-white", {
+                scrollTrigger: {
+                    trigger: "#feedback",
+                    start: "top 80%",
+                },
+                x: -50,
+                opacity: 0,
+                duration: 1,
+                stagger: 0.2
+            });
+
+            // Start Review Animation
+            animateReviews();
+        });
+    </script>
+</body>
+</html>
